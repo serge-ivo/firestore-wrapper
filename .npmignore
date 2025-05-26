@@ -1,0 +1,9 @@
+src
+tests
+coverage
+jest.config.*
+tsup.config.*
+tsconfig.json
+.eslintrc.*
+.gitignore
+.vscode
