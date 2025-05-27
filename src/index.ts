@@ -20,6 +20,27 @@ export {
   persistentMultipleTabManager,
   persistentSingleTabManager,
   memoryLocalCache,
+  // Runtime helpers
+  getFirestore,
+  Timestamp,
+  FieldValue, // e.g. increment, arrayUnion live under this namespace
+  FieldPath,
+  Query,
+  QueryConstraint,
+  QueryDocumentSnapshot,
+  QuerySnapshot,
+  DocumentSnapshot,
+  deleteField,
+  arrayUnion,
+  arrayRemove,
+  increment,
+  serverTimestamp,
+  GeoPoint,
+  type DocumentData,
+  type SnapshotListenOptions,
+  type Unsubscribe,
+  type WriteBatch,
+
   // Core constructor helpers that we DON'T override
   collection,
   collectionGroup,
