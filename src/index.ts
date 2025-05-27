@@ -1,10 +1,25 @@
 /**
  * Public entry: re-export everything from firebase/firestore,
- * then override read/write helpers with guarded versions
+ * then override read/write helpers with guarded versions,
  * and expose the limiter config.
  */
 
-export * from "firebase/firestore"; // types & utilities
+export * from "firebase/firestore"; // base types & utilities
+
+// ---------------------------------------------------------------------------
+// Explicit re-exports for helpers that esbuild cannot infer from an external
+// module.  Add any others your codebase might call.
+// ---------------------------------------------------------------------------
+export {
+  initializeFirestore,
+  connectFirestoreEmulator,
+  persistentLocalCache,
+  persistentMultipleTabManager,
+  persistentSingleTabManager,
+  memoryLocalCache,
+} from "firebase/firestore";
+
+// ---------------------------------------------------------------------------
 
 import * as fs from "firebase/firestore";
 import { makeGuarded } from "./wrappers";
