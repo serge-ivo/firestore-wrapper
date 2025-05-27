@@ -66,11 +66,11 @@ jobs:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
         run: npm publish --access public
 
-      - name: 🏷️  Create git tag
-        if: steps.check.outputs.needs_publish == 'true'
-        run: |
-          git config user.email "action@github.com"
-          git config user.name  "GitHub Action"
-          TAG="v${{ steps.version.outputs.version }}"
-          git tag -a "$TAG" -m "Release $TAG"
-          git push origin "$TAG"
+      # - name: 🏷️  Create git tag
+      #   if: steps.check.outputs.needs_publish == 'true'
+      #   run: |
+      #     git config user.email "action@github.com"
+      #     git config user.name  "GitHub Action"
+      #     TAG="v${{ steps.version.outputs.version }}"
+      #     git tag -a "$TAG" -m "Release $TAG"
+      #     git push origin "$TAG"
