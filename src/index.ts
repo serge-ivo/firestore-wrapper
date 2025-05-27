@@ -1,22 +1,41 @@
 /**
- * Public entry: re-export everything from firebase/firestore,
- * then override read/write helpers with guarded versions,
- * and expose the limiter config.
+ * Public entry: expose Firestore helpers through a limiter layer.
+ *
+ * 1. Re-export runtime helpers we know apps may import.
+ * 2. Re-export *types only* so TypeScript sees the full surface without
+ *    causing Rollup duplication errors.
+ * 3. Wrap core read/write helpers with the rate-limiter.
  */
 
-export * from "firebase/firestore"; // base types & utilities
+export type * from "firebase/firestore"; // ⬅️ type-only: zero runtime exports
 
 // ---------------------------------------------------------------------------
-// Explicit re-exports for helpers that esbuild cannot infer from an external
-// module.  Add any others your codebase might call.
+// Explicit runtime re-exports (extend if your codebase uses more helpers)
 // ---------------------------------------------------------------------------
 export {
+  // Advanced initialisation & cache helpers
   initializeFirestore,
   connectFirestoreEmulator,
   persistentLocalCache,
   persistentMultipleTabManager,
   persistentSingleTabManager,
   memoryLocalCache,
+  // Core constructor helpers that we DON'T override
+  collection,
+  collectionGroup,
+  doc,
+  query,
+  where,
+  orderBy,
+  limit,
+  limitToLast,
+  startAt,
+  startAfter,
+  endAt,
+  endBefore,
+  // onSnapshot, // re-exported again below (guarded), harmless in TS
+  runTransaction, // not guarded but useful to expose
+  // writeBatch, // we override commit logic below
 } from "firebase/firestore";
 
 // ---------------------------------------------------------------------------
@@ -32,11 +51,13 @@ export function configureRateLimits(cfg: LimitConfig) {
   rateLimiter.configure(cfg);
 }
 
-// -------------------- overridden helpers --------------------
+// -------------------- guarded helpers --------------------
 
 // Reads
 export const getDoc = makeGuarded(fs.getDoc, "read");
 export const getDocs = makeGuarded(fs.getDocs, "read");
+
+// Guarded listener (note: only the initial stream start counts as a read)
 export const onSnapshot = makeGuarded(fs.onSnapshot as any, "read");
 
 // Writes
