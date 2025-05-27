@@ -1,21 +1,26 @@
-# .github/workflows/publish.yml
 name: Publish Package
 
 on:
   push:
-    branches: [main] # publish when main is updated
-    tags: ["v*"] # or when a version tag is pushed manually
+    branches: [main]
+    tags: ["v*"]
 
 jobs:
   release:
     runs-on: ubuntu-latest
 
     steps:
+      # ------------------------------------------------------------
+      # Checkout source (with tags so we can compare versions)
+      # ------------------------------------------------------------
       - name: 🛎️  Checkout
         uses: actions/checkout@v3
         with:
-          fetch-depth: 0 # fetch tags for version comparison
+          fetch-depth: 0
 
+      # ------------------------------------------------------------
+      # Node & dependency setup
+      # ------------------------------------------------------------
       - name: 🔧 Setup Node
         uses: actions/setup-node@v3
         with:
@@ -26,12 +31,14 @@ jobs:
       - name: 📦 Install dependencies
         run: npm ci
 
-      # --------------------------------------------------------------------
-      # Determine whether the package version has already been released
-      # --------------------------------------------------------------------
+      # ------------------------------------------------------------
+      # Determine version and whether publish is needed
+      # ------------------------------------------------------------
       - name: 🏷️  Get current version
         id: version
-        run: echo "version=$(node -p \"require('./package.json').version\")" >> "$GITHUB_OUTPUT"
+        run: |
+          ver=$(node -p "require('./package.json').version")
+          echo "version=$ver" >> "$GITHUB_OUTPUT"
 
       - name: 🔍 Check if publish needed
         id: check
@@ -41,14 +48,14 @@ jobs:
           CURR="v${{ steps.version.outputs.version }}"
           echo "Latest tag: $PREV  •  package.json: $CURR"
           if [ "$PREV" != "$CURR" ]; then
-            echo "needs_publish=true" >> "$GITHUB_OUTPUT"
+            echo "needs_publish=true"  >> "$GITHUB_OUTPUT"
           else
             echo "needs_publish=false" >> "$GITHUB_OUTPUT"
           fi
 
-      # --------------------------------------------------------------------
-      # Build & publish only when needed
-      # --------------------------------------------------------------------
+      # ------------------------------------------------------------
+      # Build & publish only if version changed
+      # ------------------------------------------------------------
       - name: 🛠️  Build
         if: steps.check.outputs.needs_publish == 'true'
         run: npm run build
