@@ -2,7 +2,11 @@ import { rateLimiter } from "../src/limiter";
 
 describe("RateLimiter basics", () => {
   beforeEach(() => {
-    rateLimiter.configure({ global: { read: 2, windowMs: 50 } });
+    // start each test completely fresh
+    rateLimiter.reset();
+    rateLimiter.configure({
+      global: { read: 2, windowMs: 50 }, // allow 2 reads per 50 ms
+    });
   });
 
   it("allows up to the configured global read count", async () => {

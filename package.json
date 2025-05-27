@@ -1,55 +1,49 @@
 {
-  "name": "@serge-ivo/firestore-wrapper",
-  "version": "0.1.0",
-  "description": "Drop-in Firestore client with configurable read/write limits",
-  "keywords": [
-    "firebase",
-    "firestore",
-    "rate-limit",
-    "wrapper",
-    "typescript"
-  ],
-  "author": "Serge Ivo <serge@example.com>",
-  "license": "MIT",
-  "homepage": "https://github.com/serge-ivo/firestore-wrapper#readme",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/serge-ivo/firestore-wrapper.git"
-  },
-  "sideEffects": false,
-  "main": "dist/index.js",
-  "module": "dist/index.mjs",
-  "types": "dist/index.d.ts",
-  "exports": {
-    ".": {
-      "require": "./dist/index.js",
-      "import": "./dist/index.mjs",
-      "types": "./dist/index.d.ts"
+    "name": "@serge-ivo/firestore-wrapper",
+    "version": "0.1.0",
+    "description": "Drop-in Firestore client with configurable read/write limits",
+    "keywords": ["firebase", "firestore", "rate-limit", "wrapper", "typescript"],
+    "author": "Serge Ivo <serge@example.com>",
+    "license": "MIT",
+    "homepage": "https://github.com/serge-ivo/firestore-wrapper#readme",
+    "repository": {
+      "type": "git",
+      "url": "https://github.com/serge-ivo/firestore-wrapper.git"
+    },
+    "sideEffects": false,
+    "main": "dist/index.js",
+    "module": "dist/index.mjs",
+    "types": "dist/index.d.ts",
+    "exports": {
+      ".": {
+        "require": "./dist/index.js",
+        "import": "./dist/index.mjs",
+        "types": "./dist/index.d.ts"
+      }
+    },
+    "files": ["dist"],
+    "scripts": {
+      "build": "tsup src/index.ts --format cjs,esm --dts --clean",
+      "dev": "tsup src/index.ts --watch --format cjs,esm --dts",
+      "test": "jest --passWithNoTests",
+      "lint": "eslint \"src/**/*.{ts,tsx}\"",
+      "prepare": "husky install",
+      "release": "npm publish --access public"
+    },
+    "peerDependencies": {
+      "firebase": "^10.10.0"
+    },
+    "devDependencies": {
+      "@types/jest": "^29.5.3",
+      "@typescript-eslint/eslint-plugin": "^7.0.1",
+      "@typescript-eslint/parser": "^7.0.1",
+      "eslint": "^8.56.0",
+      "ts-node": "^10.9.2",
+      "husky": "^9.0.11",
+      "jest": "^29.7.0",
+      "ts-jest": "^29.1.2",
+      "tsup": "^8.0.1",
+      "typescript": "^5.4.5"
     }
-  },
-  "files": [
-    "dist"
-  ],
-  "scripts": {
-    "build": "tsup src/index.ts --format cjs,esm --dts --clean",
-    "dev": "tsup src/index.ts --watch --format cjs,esm --dts",
-    "test": "jest --passWithNoTests",
-    "lint": "eslint \"src/**/*.{ts,tsx}\"",
-    "prepare": "husky install",
-    "release": "npm publish --access public"
-  },
-  "peerDependencies": {
-    "firebase": "^10.10.0"
-  },
-  "devDependencies": {
-    "@types/jest": "^29.5.3",
-    "@typescript-eslint/eslint-plugin": "^7.0.1",
-    "@typescript-eslint/parser": "^7.0.1",
-    "eslint": "^9.4.0",
-    "husky": "^9.0.11",
-    "jest": "^29.7.0",
-    "ts-jest": "^29.1.2",
-    "tsup": "^8.0.1",
-    "typescript": "^5.4.5"
   }
-}
+  
