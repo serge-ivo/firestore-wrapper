@@ -7,7 +7,7 @@ on:
 
 permissions:
   contents: write
-  id-token: write
+  packages: write
 
 jobs:
   release:
@@ -18,7 +18,7 @@ jobs:
       # Checkout source (with tags so we can compare versions)
       # ------------------------------------------------------------
       - name: 🛎️  Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
@@ -26,10 +26,10 @@ jobs:
       # Node & dependency setup
       # ------------------------------------------------------------
       - name: 🔧 Setup Node
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           node-version: "20"
-          registry-url: "https://registry.npmjs.org"
+          registry-url: "https://npm.pkg.github.com"
           cache: "npm"
 
       - name: 📦 Install dependencies
@@ -64,9 +64,11 @@ jobs:
         if: steps.check.outputs.needs_publish == 'true'
         run: npm run build
 
-      - name: 🚀 Publish to npm
+      - name: 🚀 Publish to GitHub Packages
         if: steps.check.outputs.needs_publish == 'true'
-        run: npm publish --provenance --access public
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: npm publish
 
       - name: 🏷️  Create git tag
         if: steps.check.outputs.needs_publish == 'true'

@@ -1,7 +1,10 @@
 {
   "name": "@serge-ivo/firestore-wrapper",
-  "version": "0.2.2",
+  "version": "0.2.3",
   "description": "Drop-in Firestore client with configurable read/write limits",
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com"
+  },
   "keywords": [
     "firebase",
     "firestore",
