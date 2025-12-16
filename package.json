@@ -14,7 +14,7 @@
   "homepage": "https://github.com/serge-ivo/firestore-wrapper#readme",
   "repository": {
     "type": "git",
-    "url": "https://github.com/serge-ivo/firestore-wrapper.git"
+    "url": "git+https://github.com/serge-ivo/firestore-wrapper.git"
   },
   "sideEffects": false,
   "main": "dist/index.js",
