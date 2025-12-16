@@ -46,6 +46,8 @@ export {
   collectionGroup,
   doc,
   query,
+  and,
+  or,
   where,
   orderBy,
   limit,

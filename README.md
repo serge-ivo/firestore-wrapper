@@ -163,13 +163,3 @@ beforeEach(() => {
 ## 🪪 License
 
 [MIT](LICENSE)
-
-```
-
-Copy/paste over your existing **README.md** (or merge sections you like).
-It now includes:
-
-* The quick explicit approach **and** the seamless alias pattern.
-* Hard-coded limiter example.
-* API table and testing snippet.
-```
