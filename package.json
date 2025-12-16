@@ -1,6 +1,6 @@
 {
   "name": "@serge-ivo/firestore-wrapper",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "Drop-in Firestore client with configurable read/write limits",
   "keywords": [
     "firebase",
