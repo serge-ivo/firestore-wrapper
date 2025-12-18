@@ -14,14 +14,22 @@ There are three ways to publish npm packages from GitHub Actions:
 
 ---
 
-## GitHub Packages (Current Setup)
+## Dual Publishing Setup (Current)
 
-This repository publishes to **GitHub Packages**, which uses the built-in `GITHUB_TOKEN` - no manual token management needed!
+This repository publishes to **both GitHub Packages and npmjs.org**:
+- **GitHub Packages**: Uses built-in `GITHUB_TOKEN` (no token management)
+- **npmjs.org**: Uses OIDC Trusted Publisher (no token needed)
+
+This gives users flexibility to install from either registry!
 
 ### How to Install the Package
 
-Users need to configure npm to use GitHub Packages for the `@serge-ivo` scope:
+**From npmjs.org** (default, no config needed):
+```bash
+npm install @serge-ivo/firestore-wrapper
+```
 
+**From GitHub Packages** (requires registry config):
 ```bash
 # Option 1: Add to project .npmrc
 echo "@serge-ivo:registry=https://npm.pkg.github.com" >> .npmrc
@@ -33,7 +41,7 @@ npm config set @serge-ivo:registry https://npm.pkg.github.com
 npm install @serge-ivo/firestore-wrapper
 ```
 
-**Note**: For private packages, users also need to authenticate:
+**Note**: For private GitHub Packages, users also need to authenticate:
 ```bash
 npm login --registry=https://npm.pkg.github.com
 ```
@@ -50,6 +58,7 @@ on:
 permissions:
   contents: write   # For git tags
   packages: write   # For GitHub Packages
+  id-token: write   # For npm OIDC authentication
 
 jobs:
   release:
@@ -66,10 +75,15 @@ jobs:
       - run: npm ci
       - run: npm run build
 
+      # Publish to GitHub Packages (uses publishConfig in package.json)
       - name: Publish to GitHub Packages
         env:
           NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: npm publish
+
+      # Publish to npmjs.org (overrides registry)
+      - name: Publish to npmjs.org
+        run: npm publish --registry https://registry.npmjs.org --provenance --access public
 ```
 
 ### package.json Configuration

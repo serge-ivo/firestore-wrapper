@@ -8,6 +8,7 @@ on:
 permissions:
   contents: write
   packages: write
+  id-token: write  # For npm OIDC authentication
 
 jobs:
   release:
@@ -69,6 +70,10 @@ jobs:
         env:
           NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: npm publish
+
+      - name: 📦 Publish to npmjs.org
+        if: steps.check.outputs.needs_publish == 'true'
+        run: npm publish --registry https://registry.npmjs.org --provenance --access public
 
       - name: 🏷️  Create git tag
         if: steps.check.outputs.needs_publish == 'true'
