@@ -6,17 +6,18 @@ This document explains how to publish packages from GitHub Actions.
 
 There are three ways to publish npm packages from GitHub Actions:
 
-| Method | Security | Maintenance | Recommended |
-|--------|----------|-------------|-------------|
-| **GitHub Packages** | High (built-in token) | None | ✅ Yes (this repo) |
-| **npm OIDC Trusted Publisher** | High (no secrets) | Low | For public npm |
-| **npm Access Token** | Medium (secret storage) | High (tokens expire) | Legacy |
+| Method                         | Security                | Maintenance          | Recommended        |
+| ------------------------------ | ----------------------- | -------------------- | ------------------ |
+| **GitHub Packages**            | High (built-in token)   | None                 | ✅ Yes (this repo) |
+| **npm OIDC Trusted Publisher** | High (no secrets)       | Low                  | For public npm     |
+| **npm Access Token**           | Medium (secret storage) | High (tokens expire) | Legacy             |
 
 ---
 
 ## Dual Publishing Setup (Current)
 
 This repository publishes to **both GitHub Packages and npmjs.org**:
+
 - **GitHub Packages**: Uses built-in `GITHUB_TOKEN` (no token management)
 - **npmjs.org**: Uses OIDC Trusted Publisher (no token needed)
 
@@ -25,11 +26,13 @@ This gives users flexibility to install from either registry!
 ### How to Install the Package
 
 **From npmjs.org** (default, no config needed):
+
 ```bash
 npm install @serge-ivo/firestore-wrapper
 ```
 
 **From GitHub Packages** (requires registry config):
+
 ```bash
 # Option 1: Add to project .npmrc
 echo "@serge-ivo:registry=https://npm.pkg.github.com" >> .npmrc
@@ -42,6 +45,7 @@ npm install @serge-ivo/firestore-wrapper
 ```
 
 **Note**: For private GitHub Packages, users also need to authenticate:
+
 ```bash
 npm login --registry=https://npm.pkg.github.com
 ```
@@ -56,9 +60,9 @@ on:
     branches: [main]
 
 permissions:
-  contents: write   # For git tags
-  packages: write   # For GitHub Packages
-  id-token: write   # For npm OIDC authentication
+  contents: write # For git tags
+  packages: write # For GitHub Packages
+  id-token: write # For npm OIDC authentication
 
 jobs:
   release:
@@ -125,7 +129,7 @@ For publishing to the public npm registry without tokens, using OIDC (OpenID Con
 ```yaml
 permissions:
   contents: write
-  id-token: write  # Required for OIDC
+  id-token: write # Required for OIDC
 
 # In setup-node:
 registry-url: "https://registry.npmjs.org"
@@ -136,11 +140,11 @@ run: npm publish --provenance --access public
 
 ### Troubleshooting OIDC
 
-| Error | Cause | Solution |
-|-------|-------|----------|
-| "Access token expired" | Token overriding OIDC | Remove `NODE_AUTH_TOKEN` env var |
-| 404 Not Found | Trusted Publisher not saved | Click "Save changes" on npm |
-| "missing id-token permission" | Missing permission | Add `id-token: write` to permissions |
+| Error                         | Cause                       | Solution                             |
+| ----------------------------- | --------------------------- | ------------------------------------ |
+| "Access token expired"        | Token overriding OIDC       | Remove `NODE_AUTH_TOKEN` env var     |
+| 404 Not Found                 | Trusted Publisher not saved | Click "Save changes" on npm          |
+| "missing id-token permission" | Missing permission          | Add `id-token: write` to permissions |
 
 ---
 

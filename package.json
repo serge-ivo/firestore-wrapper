@@ -39,7 +39,8 @@
     "test": "jest --passWithNoTests",
     "lint": "eslint \"src/**/*.{ts,tsx}\"",
     "prepare": "husky install",
-    "release": "npm publish --access public"
+    "release": "npm run build && npm publish --registry https://registry.npmjs.org --access public",
+    "release:github": "npm run build && npm publish --access public"
   },
   "peerDependencies": {
     "firebase": ">=12.6.0 <13"
